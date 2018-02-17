@@ -7,12 +7,11 @@ __all__ = [
 ]
 
 
-def _identify(x):
+def _identity(x):
     return x
 
 
 # TODO dump and load
-# TODO most common n
 class Vocab(object):
     def __init__(self, counter: Counter = None, specials: List[str] = None, tensor_factory=None):
         super(Vocab, self).__init__()
@@ -25,13 +24,13 @@ class Vocab(object):
         self.specials = specials
 
         if tensor_factory is None:
-            tensor_factory = _identify
+            tensor_factory = _identity
         self.tensor_factory = tensor_factory
 
         self.token2ix = defaultdict(lambda: 0)
         self.ix2token = defaultdict(lambda: '<unk>')
 
-        stream = itertools.chain(counter.values(), specials)
+        stream = itertools.chain(counter.keys(), specials)
         for ix, token in enumerate(stream, start=self.__len__()):
             self._insert(ix, token)
 
@@ -68,8 +67,9 @@ class Vocab(object):
     def tokens(self):
         return self.counter.keys()
 
-    def most_common(self, n: int = None):
-        return Vocab(Counter(self.counter.most_common(n)), self.specials, self.tensor_factory)
+    # TODO implement most_common
+    def most_common(self, n: int) -> 'Vocab':
+        raise NotImplementedError
 
 
 if __name__ == '__main__':
@@ -77,5 +77,3 @@ if __name__ == '__main__':
     print(vocab.update('this is a nice word'.split()))
     print(vocab.inverse([1, 2, 3, 4, 5, 10]))
     print(vocab.update('this is nice'.split()))
-
-    print(vocab.most_common(2).tokens)
