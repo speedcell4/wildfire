@@ -1,2 +1,2 @@
 # wildfire
-training loop and utilities for agnostic framework
+natural language processing utilities for agnostic framework
